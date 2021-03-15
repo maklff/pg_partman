@@ -718,6 +718,11 @@ IF p_type = 'native' AND current_setting('server_version_num')::int >= 110000 TH
     END IF;
     v_sql := v_sql || ')';
     EXECUTE v_sql;
+
+    v_sql := format('ALTER TABLE %I.%I OWNER TO %I;'
+        , v_parent_schema, v_default_partition, v_parent_owner);
+    EXECUTE v_sql;
+
     v_sql := format('ALTER TABLE %I.%I ATTACH PARTITION %I.%I DEFAULT'
         , v_parent_schema, v_parent_tablename, v_parent_schema, v_default_partition);
     EXECUTE v_sql;
